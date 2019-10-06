@@ -1,5 +1,45 @@
-@()
+@(files: List[FileRecord])
 
 @main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
+    <h1>File archive</h1>
+    <br/>
+    <h2>Files</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>filename</td>
+                <td>remove</td>
+            </tr>
+        </thead>
+        @for(file <- files) {
+            <tr>
+                <td>@file.getName</td>
+                <td>
+                @helper.form(action = routes.FileController.delete) {
+
+                    <input type="hidden" name="id" value="@file.getId">
+
+                    <p>
+                        @helper.CSRF.formField
+                        <input type="submit" value="remove">
+                    </p>
+                }
+                </td>
+            </tr>
+        }
+    </table>
+    <br>
+    <h2>Upload</h2>
+    @helper.form(action = routes.FileController.upload, 'enctype -> "multipart/form-data") {
+
+        <input type="file" name="picture">
+
+        <p>
+            @helper.CSRF.formField
+            <input type="submit">
+        </p>
+
+
+    }
+
 }

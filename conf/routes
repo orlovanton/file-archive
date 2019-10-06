@@ -1,11 +1,12 @@
 # Routes
-# This file defines all application routes (Higher priority routes first)
+# This fileRecord defines all application routes (Higher priority routes first)
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
-POST    /upload                     controllers.UploadController.upload(request: Request)
-GET     /download/:id               controllers.DownloadController.download(id: Long)
+GET         /                          controllers.HomeController.index
+POST        /upload                    controllers.FileController.upload(request: Request)
+POST        /delete                    controllers.FileController.delete
+GET         /download/:id              controllers.FileController.download(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*fileRecord        controllers.Assets.versioned(path="/public", fileRecord: Asset)

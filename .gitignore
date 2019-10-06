@@ -6,4 +6,5 @@ target
 /.project
 /.settings
 /.g8
+/tmp
 /RUNNING_PID
