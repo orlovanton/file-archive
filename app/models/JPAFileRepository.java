@@ -39,10 +39,13 @@ public class JPAFileRepository implements FileRepository {
     }
 
     @Override
-    public CompletionStage<Void> remove(Long id) {
-        throw new IllegalStateException("Not implemented yet");
+    public void remove(Long id) {
+        wrap(em -> {
+            FileRecord fileRecord = em.find(FileRecord.class, id);
+            em.remove(fileRecord);
+            return null;
+        });
     }
-
 
     @Override
     public CompletionStage<Stream<FileRecord>> list() {

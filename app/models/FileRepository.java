@@ -12,7 +12,7 @@ public interface FileRepository {
 
     CompletionStage<FileRecord> get(Long id);
 
-    public CompletionStage<Void> remove(Long id);
+    void remove(Long id);
 
     CompletionStage<Stream<FileRecord>> list();
 
