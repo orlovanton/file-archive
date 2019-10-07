@@ -15,8 +15,24 @@
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
     </head>
     <body>
-        @* And here's where we render the `Html` object containing
-         * the page content. *@
+        @if(flash.containsKey("success")) {
+            <ul class="success">
+                <li class="align-center">@Html(flash.get("success"))</li>
+            </ul>
+        }
+
+        @if(flash.containsKey("error")) {
+            <ul class="error">
+                <li class="align-center">@Html(flash.get("error")))</li>
+            </ul>
+        }
+
+        @if(flash.containsKey("warning")) {
+            <ul class="warning">
+                <li class="align-center">@Html(flash.get("warning"))</li>
+            </ul>
+        }
+
         @content
 
         <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>

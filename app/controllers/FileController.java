@@ -43,9 +43,9 @@ public class FileController extends Controller {
             fileService.add(new FileRecord(filename));
             Files.TemporaryFile tempFile = file.getRef();
             tempFile.copyTo(Paths.get(config.getString("archive.storage") + filename), true);
-            return (ok("file uploaded")); //todo: think about it
+            return redirect(routes.HomeController.index()).flashing("success", "File uploaded");
         } else {
-            return badRequest().flashing("error", "Missing file");
+            return redirect(routes.HomeController.index()).flashing("error", "Missing file");
         }
     }
 
@@ -69,7 +69,7 @@ public class FileController extends Controller {
 
     @BodyParser.Of(BodyParser.FormUrlEncoded.class)
     public Result delete() {
-        final Form<FileRecordDeleteForm> form = formFactory.form(FileRecordDeleteForm.class) .bindFromRequest("id");
+        final Form<FileRecordDeleteForm> form = formFactory.form(FileRecordDeleteForm.class).bindFromRequest("id");
         fileService.delete(form.get().id);
         return redirect(routes.HomeController.index());
     }

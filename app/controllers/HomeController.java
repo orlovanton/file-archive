@@ -1,12 +1,11 @@
 package controllers;
 
 import com.google.inject.Inject;
-import models.FileRecord;
 import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.*;
+import play.mvc.Controller;
+import play.mvc.Result;
 import services.FileService;
 
-import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
@@ -26,6 +25,7 @@ public class HomeController extends Controller {
     }
 
     public CompletionStage<Result> index() {
+        //todo: check why CSRF crashes if upload two files one by one
         return fileService.list()
                 .thenApplyAsync(personStream ->
                         ok(views.html.index.render(personStream.collect(Collectors.toList()))), ec.current()
