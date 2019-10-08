@@ -8,5 +8,16 @@ POST        /upload                    controllers.FileController.upload(request
 POST        /delete                    controllers.FileController.delete
 GET         /download/:id              controllers.FileController.download(id: Long)
 
+
+# Serve index page from public directory
+GET     /                           controllers.FrontendController.index()
+
+
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*fileRecord        controllers.Assets.versioned(path="/public", fileRecord: Asset)
+
+
+GET     /api/summary                controllers.HomeController.appSummary
+GET     /api/file/list              controllers.ApiFileController.list
+GET     /api/file/download/:id      controllers.FileController.download(id: Long)
+

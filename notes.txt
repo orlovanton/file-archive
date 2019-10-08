@@ -1,0 +1,12 @@
+https://blog.usejournal.com/react-with-play-framework-2-6-x-a6e15c0b7bd
+
+
+file downloading
+https://medium.com/yellowcode/download-api-files-with-react-fetch-393e4dae0d9e
+https://rieckpil.de/howto-up-and-download-files-with-react-and-spring-boot/
+
+
+todo:
+file uploading
+security
+deploy to production

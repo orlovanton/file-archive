@@ -1,6 +1,8 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
+import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -30,6 +32,27 @@ public class HomeController extends Controller {
                 .thenApplyAsync(personStream ->
                         ok(views.html.index.render(personStream.collect(Collectors.toList()))), ec.current()
                 );
+    }
+
+    public Result appSummary() {
+        JsonNode jsonNode = Json.toJson(new AppSummary("Java Play React Seed!"));
+        return ok(jsonNode).as("application/json");
+    }
+
+    class AppSummary {
+        private String content;
+
+        AppSummary(String content) {
+            this.content = content;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
     }
 
 }
