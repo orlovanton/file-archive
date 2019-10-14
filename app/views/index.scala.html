@@ -1,10 +1,12 @@
-@(files: List[FileRecord])
+@import forms.FileRecordDescriptionForm
+
+@import views.html.helper.CSRF
+@(files: List[FileRecord], form: Form[FileRecordDescriptionForm])
 
 @main("File archive") {
     <h1>File archive</h1>
 
     <div id="content"></div>
-
 
 
     <br/>
@@ -13,12 +15,14 @@
         <thead>
             <tr>
                 <td>filename</td>
+                <td>description</td>
                 <td>remove</td>
             </tr>
         </thead>
         @for(file <- files) {
             <tr>
-                <td>@file.getName</td>
+                <td><a href="@routes.FileController.download(file.getId)">@file.getName </a></td>
+                <td>@Html(file.getDescription)</td>
                 <td>
                 @helper.form(action = routes.FileController.delete) {
 
@@ -34,17 +38,68 @@
         }
     </table>
     <br>
-    <h2>Upload</h2>
-    @helper.form(action = routes.FileController.upload, 'enctype -> "multipart/form-data") {
-
-        <input type="file" name="picture">
-
+    <h2>Description</h2>
+    @helper.form(action = routes.FileController.saveDesctiption, 'id -> "save-description") {
+        @* <input type="hidden" name="id" value="@form("id")" />*@
+        @helper.inputText(form("id"), 'hidden -> "hidden", '_label -> "")
+        @helper.input(form("description"), '_label -> "") { (id, name, value, args) =>
+            <input type="hidden" name="@name" id="@id" value="@value" @toHtmlArgs(args)>
+            <trix-editor input="@id"></trix-editor>
+        }
         <p>
             @helper.CSRF.formField
             <input type="submit">
         </p>
-
-
     }
 
+    <br>
+    <h2>Add attachement</h2>
+    @helper.form(action = routes.FileController.upload, 'enctype -> "multipart/form-data", 'id -> "upload-file") {
+        <input type="file" name="picture">
+        <p>
+            @CSRF.formField
+            <input type="submit">
+        </p>
+
+    }
+    <div id="result"></div>
+
+    <script type="application/javascript">
+    document.addEventListener("DOMContentLoaded", function(){
+
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Csrf-Token', $('meta[name="csrfToken"]').attr('content'));
+                },
+                javascript: false
+            });
+
+          document.getElementById('upload-file').addEventListener("submit", function(e){
+            e.preventDefault();
+            var form = e.target;
+            var data = new FormData(form);
+
+            var request = new XMLHttpRequest();
+
+            request.onreadystatechange = function(){
+              document.getElementById("result").innerText = request.responseText
+            };
+
+            request.onload = function () {
+                // Process our return data
+                if (request.status >= 200 && request.status < 300) {
+                    // Runs when the request is successful
+                        var data = JSON.parse(request.responseText);
+                        document.querySelector('#save-description #id').setAttribute("value", data.id);
+                } else {
+                    // Runs when it's not
+                  alert(request.responseText);
+                }
+            };
+
+            request.open(form.method, form.action);
+            request.send(data);
+          })
+        })
+    </script>
 }

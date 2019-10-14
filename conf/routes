@@ -6,6 +6,7 @@
 GET         /                          controllers.HomeController.index
 POST        /upload                    controllers.FileController.upload(request: Request)
 POST        /delete                    controllers.FileController.delete
+POST        /save                      controllers.FileController.saveDesctiption(request: Request)
 GET         /download/:id              controllers.FileController.download(id: Long)
 
 

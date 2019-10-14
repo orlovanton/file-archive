@@ -28,9 +28,19 @@ public class JPAFileRepository implements FileRepository {
         return supplyAsync(() -> wrap(em -> insert(em, person)), executionContext);
     }
 
-    private FileRecord insert(EntityManager em, FileRecord fileRecord) {
-        em.persist(fileRecord);
-        return fileRecord;
+    @Override
+    public CompletionStage<FileRecord> update(FileRecord fileRecord) {
+        return supplyAsync(() -> wrap(em -> {
+            FileRecord dbRecord = em.find(FileRecord.class, fileRecord.getId());
+            if (dbRecord == null) {
+                throw new RuntimeException("Record not found");
+            }
+            dbRecord.setDescription(fileRecord.getDescription());
+
+            em.persist(dbRecord);
+
+            return dbRecord;
+        }));
     }
 
     @Override
@@ -50,6 +60,11 @@ public class JPAFileRepository implements FileRepository {
     @Override
     public CompletionStage<Stream<FileRecord>> list() {
         return supplyAsync(() -> wrap(em -> list(em)), executionContext);
+    }
+
+    private FileRecord insert(EntityManager em, FileRecord fileRecord) {
+        em.persist(fileRecord);
+        return fileRecord;
     }
 
     private Stream<FileRecord> list(EntityManager em) {

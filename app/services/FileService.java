@@ -22,6 +22,9 @@ public class FileService {
         return fileRepository.add(fileRecord);
     }
 
+    public CompletionStage<FileRecord> update(FileRecord fileRecord) {
+        return fileRepository.update(fileRecord);
+    }
 
     public CompletionStage<FileRecord> get(Long id) {
         return fileRepository.get(id);
